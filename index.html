@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador de Preços</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="bg-primary text-white py-3 bg-dark">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0">Comparador de Preços</h1>
+      <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://s2-quem.glbimg.com/Kf7B8nJk6c8LnFnwbkGCgHGS8hk=/53x0:821x768/fit-in/828x768/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_b0f0e84207c948ab8b8777be5a6a4395/internal_photos/bs/2022/S/u/CFQiwlQDa2cnJ2MUkkAA/2021-01-05-fausto-silva-qu5o9ry.jpeg" alt="Foto de Perfil" class="rounded-circle me-2" width="40">
+          Fausto Silva
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" href="profile.html">Meu Perfil</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Configurações</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#shoppingListModal">Gerenciar Lista de Compras</a></li>
+          <li><a class="dropdown-item" href="#">Sair</a></li>
+        </ul>        
+      </div>
+    </div>
+  </header>
+
+  <!-- Formulário e conteúdo principal -->
+  <main class="container my-4">
+    <!-- Formulário de comparação de preços -->
+    <form id="priceForm" class="bg-light p-4 rounded shadow">
+      <div class="mb-3">
+        <label for="product" class="form-label">Produto:</label>
+        <select id="product" class="form-select" required></select>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Preço (R$):</label>
+        <input type="number" id="price" name="price" class="form-control" required step="0.01">
+      </div>
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantidade:</label>
+        <input type="number" id="quantity" name="quantity" class="form-control" required step="1" min="1">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Pesquisar</button>
+    </form>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Últimas Promoções</h1>
+      <div class="row">
+        <!-- Card 1 -->
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem;">
+            <img class="w-30 card-img-top" src="https://propao.agilecdn.com.br/2315_1.jpg" alt="Imagem Promoção 1">
+            <div class="card-body">
+              <h5 class="card-title">Promoção: Arroz</h5>
+              <p class="card-text">Arroz no Mercado A por apenas <strong>R$ 19,90</strong>!</p>
+              <a href="#" class="btn btn-primary">Comprar Agora</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem;">
+            <img class="w-30 card-img-top" src="https://propao.agilecdn.com.br/4491_1.jpg" alt="Imagem Promoção 2">
+            <div class="card-body">
+              <h5 class="card-title">Promoção: Feijão</h5>
+              <p class="card-text">Feijão no Mercado C por apenas <strong>R$ 7,75</strong>!</p>
+              <a href="#" class="btn btn-primary">Comprar Agora</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem;">
+            <img class="w-30 card-img-top" src="https://propao.agilecdn.com.br/4630_1.jpg" alt="Imagem Promoção 3">
+            <div class="card-body">
+              <h5 class="card-title">Promoção: Milho</h5>
+              <p class="card-text">Milho no Mercado D por apenas <strong>R$ 5,10</strong>!</p>
+              <a href="#" class="btn btn-primary">Comprar Agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultados da pesquisa -->
+    <div id="result" class="mt-4 text-center"></div>
+
+    <!-- Gráficos -->
+    <div class="mt-5">
+      <canvas id="priceChart"></canvas>
+    </div>
+
+    <div class="mt-5">
+      <canvas id="affineChart"></canvas>
+    </div>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="bg-dark text-white text-center py-3">
+    <p class="mb-0">© 2024 Comparador de Preços. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- Modal de Configurações -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="settingsModalLabel">Configurações</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="language" class="form-label">Idioma</label>
+              <select class="form-select" id="language">
+                <option value="pt-br" selected>Português</option>
+                <option value="en">Inglês</option>
+                <option value="es">Espanhol</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="currency" class="form-label">Moeda</label>
+              <select class="form-select" id="currency">
+                <option value="BRL" selected>R$ Real</option>
+                <option value="USD">US$ Dólar</option>
+                <option value="EUR">€ Euro</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="theme" class="form-label">Tema</label>
+              <select class="form-select" id="theme">
+                <option value="light" selected>Claro</option>
+                <option value="dark">Escuro</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary">Salvar Configurações</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Lista de Compras -->
+ <!-- Modal Gerenciar Lista de Compras -->
+ <div class="modal fade" id="shoppingListModal" tabindex="-1" aria-labelledby="shoppingListModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Tamanho maior do modal -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shoppingListModalLabel">Lista de Compras</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group" id="shoppingListItems">
+          <!-- Itens da lista de compras serão adicionados aqui -->
+        </ul>
+        <div class="input-group mt-3">
+          <select id="productSelectModal" class="form-select" required>
+            <option value="" selected disabled>Escolha um produto</option>
+            <!-- Lista de produtos será preenchida via JavaScript -->
+          </select>
+        </div>
+        
+        <!-- Campo de quantidade -->
+        <div class="input-group mt-2">
+          <input type="number" id="quantityInputModal" class="form-control" placeholder="Quantidade" min="1" required>
+        </div>
+        
+        <!-- Campo de preço -->
+        <div class="input-group mt-2">
+          <input type="number" id="priceInputModal" class="form-control" placeholder="Preço (opcional)">
+        </div>
+        
+        <!-- Texto explicativo sobre preço -->
+        <div class="mt-1">
+          <small class="text-muted">Se não preencher o preço, será considerado o preço mais barato disponível.</small>
+        </div>
+
+        <!-- Botão de adicionar -->
+        <div class="mt-3">
+          <button id="addItem" class="btn btn-primary w-100" type="button">Adicionar</button>
+        </div>
+
+        <div class="mt-3">
+          <h6>Total: R$ <span id="totalPrice">0.00</span></h6>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" id="saveList">Salvar Lista</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
